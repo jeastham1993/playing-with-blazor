@@ -1,0 +1,51 @@
+﻿@page "/"
+
+<h1>Todo (@todos.Count(todo => !todo.IsDone))</h1>
+
+@if (todos.Count() == 0){
+    <p>Add a todo list item below to get started</p>
+}
+else {
+    <table class="striped">
+        <thead>
+          <tr>
+              <th>Item</th>
+              <th>Complete</th>
+          </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var todo in todos){
+                <tr>
+                    <td>@todo.Title</td>
+                    <td>
+                        <p>
+                            <label>
+                                <input type="checkbox" class="filled-in" @bind="todo.IsDone" />
+                                <span></span>
+                            </label>
+                        </p>
+                    </td>
+                </tr>
+            }
+        </tbody>
+      </table>
+}
+
+<div class="input-field col s6">
+    <input id="newTodo" type="text" class="validate" @bind="newTodo" />
+    <label for="newTodo">New To Do</label>
+</div>
+<a class="waves-effect waves-light btn" @onclick="AddTodo">Add</a>
+
+@code {
+    private string newTodo;
+    private IList<TodoItem> todos = new List<TodoItem>();
+
+    private void AddTodo(){
+        if (string.IsNullOrEmpty(this.newTodo) == false){
+            todos.Add(new TodoItem{Title = newTodo});
+            newTodo = string.Empty;
+        }
+    }
+}
