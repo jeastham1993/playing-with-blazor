@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HRM.Server.Services;
 using HRM.Shared;
 using Microsoft.AspNetCore.Components;
 
@@ -8,15 +9,15 @@ namespace HRM.Server.Pages
 {
 	public class EmployeeOverviewBase : ComponentBase
 	{
+		[Inject] public IEmployeeDataService EmployeeDataService { get; set; }
+
 		public IEnumerable<Employee> Employees { get; set; }
 
-		protected override Task OnInitializedAsync()
+		protected override async Task OnInitializedAsync()
 		{
 			this.InitializeCountries();
 			this.InitializeJobCategories();
-			this.InitializeEmployees();
-
-			return base.OnInitializedAsync();
+			this.Employees = await this.EmployeeDataService.GetAllEmployees();
 		}
 
 		private List<Country> Countries { get; set; }
